@@ -96,12 +96,6 @@ public ItemWriter<Member> unPaidMemberWriter() {
 - STS: https://spring.io/tools
 - visual studio code: https://code.visualstudio.com/download
 
-# 도움되는 사이트 
-- json editor: https://jsoneditoronline.org/#left=local.soyiro&right=local.fawige
-- thymeleaf: https://www.thymeleaf.org/
-- 변수명이름짓기: https://www.curioustore.com/#!/
-
-
 # 프로젝트 최초 구성시
 ## 개발환경
 - https://adoptopenjdk.net/?variant=openjdk15&jvmVariant=hotspot
@@ -115,9 +109,9 @@ http://patorjk.com/software/taag/#p=display&f=Calvin%20S&t=TWD%20BFF%20PROJECT
 
 ```   
 ${Ansi.YELLOW}***********************************************************************
-${Ansi.GREEN} ╔╦╗╦ ╦╔╦╗  ╔╗ ╔═╗╔═╗  ╔═╗╦═╗╔═╗ ╦╔═╗╔═╗╔╦╗
-${Ansi.GREEN}  ║ ║║║ ║║  ╠╩╗╠╣ ╠╣   ╠═╝╠╦╝║ ║ ║║╣ ║   ║
-${Ansi.GREEN}  ╩ ╚╩╝═╩╝  ╚═╝╚  ╚    ╩  ╩╚═╚═╝╚╝╚═╝╚═╝ ╩
+${Ansi.GREEN}╔╦╗╦ ╦╔╦╗  ╔╗ ╔═╗╔╦╗╔═╗╦ ╦  ╔═╗╦═╗╔═╗ ╦╔═╗╔═╗╔╦╗
+${Ansi.GREEN} ║ ║║║ ║║  ╠╩╗╠═╣ ║ ║  ╠═╣  ╠═╝╠╦╝║ ║ ║║╣ ║   ║
+${Ansi.GREEN} ╩ ╚╩╝═╩╝  ╚═╝╩ ╩ ╩ ╚═╝╩ ╩  ╩  ╩╚═╚═╝╚╝╚═╝╚═╝ ╩
 ${Ansi.GREEN}Application                    : ${application.name}
 ${Ansi.GREEN}Port                           : ${server.port}
 ${Ansi.GREEN}Active                         : ${spring.profiles.active}
@@ -126,6 +120,7 @@ ${Ansi.GREEN}Application Title              : ${application.title}
 ${Ansi.GREEN}Spring Boot Version            : ${spring-boot.version}
 ${Ansi.GREEN}Spring Boot Formatted Version  : ${spring-boot.formatted-version}
 ${Ansi.YELLOW}***********************************************************************
+
 ```
 
 # 샘플코드 위치 
