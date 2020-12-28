@@ -96,7 +96,6 @@ public ItemWriter<Member> unPaidMemberWriter() {
 - STS: https://spring.io/tools
 - visual studio code: https://code.visualstudio.com/download
 
-# 프로젝트 최초 구성시
 ## 개발환경
 - https://adoptopenjdk.net/?variant=openjdk15&jvmVariant=hotspot
 - JDK: openJDK8
