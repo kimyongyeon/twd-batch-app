@@ -30,13 +30,13 @@ public class Member {
     private MemberStatus status;
 
     @Column
-    private int amountCharged;  // 청구된 금액
+    private int amountCharged;
 
     @Column
-    private int amountPaid; // 결제된 금액
+    private int amountPaid;
 
     @Column
-    private LocalDate dueDate;  // 결제 마감일
+    private LocalDate dueDate;
 
     @Column
     private LocalDateTime createdAt;

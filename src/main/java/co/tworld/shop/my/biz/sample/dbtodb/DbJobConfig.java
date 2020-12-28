@@ -27,7 +27,6 @@ public class DbJobConfig {
             JobBuilderFactory jobBuilderFactory,
             Step unPaidMemberJobStep
     ) {
-        log.info("********** This is unPaidMemberJob");
         return jobBuilderFactory.get("unPaidMemberJob")
                 .preventRestart()
                 .start(unPaidMemberJobStep)
@@ -38,7 +37,6 @@ public class DbJobConfig {
     public Step unPaidMemberJobStep(
             StepBuilderFactory stepBuilderFactory
     ) {
-        log.info("********** This is unPaidMemberJobStep");
         return stepBuilderFactory.get("unPaidMemberJobStep")
                 .<Member, Member> chunk(10)
                 .reader(unPaidMemberReader())
@@ -50,16 +48,13 @@ public class DbJobConfig {
     @Bean
     @StepScope
     public ListItemReader<Member> unPaidMemberReader() {
-        log.info("********** This is unPaidMemberReader");
         List<Member> activeMembers = memberRepository.findByStatusEquals(MemberStatus.ACTIVE);
-        log.info("          - activeMember SIZE : " + activeMembers.size());
         List<Member> unPaidMembers = new ArrayList<>();
         for (Member member : activeMembers) {
             if(member.isUnpaid()) {
                 unPaidMembers.add(member);
             }
         }
-        log.info("          - unPaidMember SIZE : " + unPaidMembers.size());
         return new ListItemReader<>(unPaidMembers);
     }
 
@@ -68,14 +63,12 @@ public class DbJobConfig {
         return new ItemProcessor<Member, Member>() {
             @Override
             public Member process(Member member) throws Exception {
-                log.info("********** This is unPaidMemberProcessor");
                 return member.setStatusByUnPaid();
             }
         };
     }
 
     public ItemWriter<Member> unPaidMemberWriter() {
-        log.info("********** This is unPaidMemberWriter");
         return ((List<? extends Member> memberList) ->
                 memberRepository.saveAll(memberList));
     }
