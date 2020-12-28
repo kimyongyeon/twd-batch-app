@@ -1,0 +1,25 @@
+application:
+  name: Tworld Direct Batch Project
+  title: Tworld Direct Batch Project (sub-servicename)
+  formatted-version: 0.0.1
+
+server:
+  port: 10012
+
+spring:
+  profiles:
+      active: default
+  application:
+    name: Tworld_Direct_Batch_Project
+  main:
+    allow-bean-definition-overriding: true
+
+  tomcat:
+    accesslog:
+      pattern: ACC|%a "%{X-Forwarded-For}i" %l %u %t %s_code %B_bytes %D_usecs "%r" "%{Referer}i" "%{User-Agent}i"
+      directory: /proc/self/fd
+      prefix: 1
+      suffix: ""
+      file-date-format: ""
+      enabled: true
+    basedir: .

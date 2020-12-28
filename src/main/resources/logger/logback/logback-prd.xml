@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<included>
+
+    <include resource="logger/logback/logback-base.xml"/>
+
+    <!-- Console Appender -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- <withJansi>true</withJansi> -->
+        <encoder>
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="FILELOG_BASE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${FILE_LOG_HOME}/${SPRING_APP_NAME}/${SPRING_APP_NAME}-${SPRING_APP_ACTIVE}.log</file>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${FILE_LOG_HOME}/${SPRING_APP_NAME}/archived/${SPRING_APP_NAME}-${SPRING_APP_ACTIVE}.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <!-- each archived file, size max 10MB -->
+            <maxFileSize>10MB</maxFileSize>
+            <!-- total size of all archive files, if total size > 20GB,
+				it will delete old archived file -->
+            <totalSizeCap>20GB</totalSizeCap>
+            <!-- 60 days to keep -->
+            <maxHistory>60</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+
+
+    <!-- ES appender 추가 -->
+    <appender name="ELASTIC" class="com.internetitem.logback.elasticsearch.ElasticsearchAppender">
+        <!-- 필수값 -->
+        <url>http://192.168.154.146:9200/apihub로그 적재할 ES주소</url> <!-- 적재하려는 ES 주소 -->
+        <index>logs-apihub-%date{yyyy-MM-dd}</index>
+        <type>log</type>
+        <!-- 선택값 -->
+        <!-- ES 내용을 콘솔이나 별도 로그파일로 보려고 하는 경우 반드시 logger name 지정해야 ES 적재 내용이 보임 -->
+        <loggerName>com.xunit.xunit_study.gson</loggerName>
+        <includeMdc>true</includeMdc> <!-- MDC 를 이용하여 적재하는 경우 (default false) -->
+        <sleepTime>1000</sleepTime> <!-- sleepTime 후 비동기로 처리 (in ms, default 250) -->
+        <errorsToStderr>true</errorsToStderr> <!-- 에러내용을 콘솔창에 표시 (default false) -->
+        <logsToStderr>false</logsToStderr> <!-- 로그를 콘솔창에 표시 (default false) -->
+        <headers>
+            <header>
+                <name>Content-Type</name>
+                <value>application/json</value>
+            </header>
+        </headers>
+    </appender>
+    <!-- ES로 보내는 내용을 파일로 관리 -->
+    <appender name="ES_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <charset>utf-8</charset>
+            <pattern>%msg</pattern>
+        </encoder>
+        <!-- 일자별로 로그파일 적용하기 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${FILE_LOG_HOME}/CSP/ES/ES_apihub_%d{yyyy-MM-dd}_%i.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>100MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+    </appender>
+
+
+    <!-- Spring -->
+    <logger name="org"  level="ERROR"  additivity="false" >
+        <appender-ref ref="CONSOLE" />
+    </logger>
+
+    <logger name="org.springframework"  level="ERROR"  additivity="false" >
+        <appender-ref ref="CONSOLE" />
+    </logger>
+    <logger name="org.springframework.boot.autoconfigure"  level="ERROR"  additivity="false" >
+        <appender-ref ref="CONSOLE" />
+    </logger>
+    <logger name="org.springframework.core" level="ERROR" additivity="false" >
+        <appender-ref ref="CONSOLE" />
+    </logger>
+    <logger name="org.springframework.beans" level="ERROR"  additivity="false" >
+        <appender-ref ref="CONSOLE" />
+    </logger>
+    <logger name="org.springframework.context" level="ERROR" additivity="false" >
+        <appender-ref ref="CONSOLE" />
+    </logger>
+    <logger name="org.springframework.http" level="ERROR" additivity="false" >
+        <appender-ref ref="CONSOLE" />
+    </logger>
+    <logger name="org.springframework.web" level="ERROR"  additivity="false" >
+        <appender-ref ref="CONSOLE" />
+    </logger>
+    <logger name="org.springframework.security" level="ERROR" additivity="false" >
+        <appender-ref ref="CONSOLE" />
+    </logger>
+    <logger name="org.springframework.transaction.annotation.AnnotationTransactionAttributeSource" level="ERROR" additivity="false" >
+        <appender-ref ref="CONSOLE" />
+    </logger>
+    <logger name="org.springframework.jdbc.datasource.DataSourceTransactionManager" level="ERROR"  additivity="false" >
+        <appender-ref ref="CONSOLE" />
+    </logger>
+    <logger name="org.springframework.test.web.servlet" additivity="false"  level="ERROR" >
+        <appender-ref ref="CONSOLE" />
+    </logger>
+    <logger name="org.springframework.cloud.sleuth.instrument.web" additivity="false"  level="ERROR" >
+        <appender-ref ref="CONSOLE" />
+    </logger>
+    <!-- [End] Spring log -->
+
+    <!-- SQL log -->
+    <logger name="org.springframework.jdbc" level="ERROR" additivity="false">
+        <appender-ref ref="CONSOLE" />
+    </logger>
+
+    <logger name="access" level="ERROR" additivity="false">
+        <appender-ref ref="CONSOLE" />
+    </logger>
+    <logger name="org.mybatis" level="ERROR" additivity="false">
+        <appender-ref ref="CONSOLE" />
+    </logger>
+    <!-- [End] SQL log -->
+
+    <logger name="org.apache.catalina" level="ERROR">
+        <appender-ref ref="CONSOLE" />
+    </logger>
+
+    <logger name="org.apache.commons" level="ERROR">
+        <appender-ref ref="CONSOLE" />
+    </logger>
+
+    <logger name="com.zaxxer.hikari" level="ERROR">
+        <appender-ref ref="CONSOLE" />
+    </logger>
+    <logger name="springfox.documentation" level="ERROR">
+        <appender-ref ref="CONSOLE" />
+    </logger>
+
+
+    <logger name="kr.co.tworld.shop.my" level="INFO" additivity="false">
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="FILELOG_BASE"/>
+        <!--<appender-ref ref="ELASTIC" />--> <!-- 앞에서 지정한 ES appender 로 보낸다. -->
+        <!--<appender-ref ref="ES_FILE" />--> <!-- 해당 내용을 file로 확인 -->
+    </logger>
+
+
+    <!--TRACE > DEBUG > INFO > WARN > ERROR > FATAL-->
+    <root level="ERROR">
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="FILELOG_BASE"/>
+    </root>
+
+</included>

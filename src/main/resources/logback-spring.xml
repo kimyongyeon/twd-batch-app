@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <include resource="logger/logback/logback-base.xml"/>
+
+    <!-- Console Appender -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- <withJansi>true</withJansi> -->
+        <encoder>
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <springProfile name="local,test">
+        <include resource="logger/logback/logback-local.xml"/>
+        <logger name="io.netty.util" level="ERROR"/>
+        <logger name="kr.co.tworld.shop.my" level="DEBUG" additivity="false">
+            <appender-ref ref="CONSOLE" />
+        </logger>
+    </springProfile>
+
+    <springProfile name="default">
+        <include resource="logger/logback/logback-def.xml"/>
+    </springProfile>
+
+    <springProfile name="dev">
+        <include resource="logger/logback/logback-dev.xml"/>
+    </springProfile>
+
+    <springProfile name="prd">
+        <include resource="logger/logback/logback-prd.xml"/>
+    </springProfile>
+</configuration>

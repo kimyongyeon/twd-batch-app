@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<included>
+
+    <include resource="logger/logback/logback-base.xml"/>
+
+    <!-- Console Appender -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- <withJansi>true</withJansi> -->
+        <encoder>
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="FILELOG_BASE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${FILE_LOG_HOME}/${SPRING_APP_NAME}/${SPRING_APP_NAME}-${SPRING_APP_ACTIVE}.log</file>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${FILE_LOG_HOME}/${SPRING_APP_NAME}/archived/${SPRING_APP_NAME}-${SPRING_APP_ACTIVE}.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <!-- each archived file, size max 10MB -->
+            <maxFileSize>10MB</maxFileSize>
+            <!-- total size of all archive files, if total size > 20GB,
+				it will delete old archived file -->
+            <totalSizeCap>20GB</totalSizeCap>
+            <!-- 60 days to keep -->
+            <maxHistory>60</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Spring -->
+    <logger name="org"  level="INFO"  additivity="false" >
+        <appender-ref ref="CONSOLE" />
+    </logger>
+
+    <logger name="org.springframework"  level="WARN"  additivity="false" >
+        <appender-ref ref="CONSOLE" />
+    </logger>
+    <logger name="org.springframework.boot.autoconfigure"  level="INFO"  additivity="false" >
+        <appender-ref ref="CONSOLE" />
+    </logger>
+    <logger name="org.springframework.core" level="INFO" additivity="false" >
+        <appender-ref ref="CONSOLE" />
+    </logger>
+    <logger name="org.springframework.beans" level="INFO"  additivity="false" >
+        <appender-ref ref="CONSOLE" />
+    </logger>
+    <logger name="org.springframework.context" level="INFO" additivity="false" >
+        <appender-ref ref="CONSOLE" />
+    </logger>
+    <logger name="org.springframework.http" level="DEBUG" additivity="false" >
+        <appender-ref ref="CONSOLE" />
+    </logger>
+    <logger name="org.springframework.web" level="INFO"  additivity="false" >
+        <appender-ref ref="CONSOLE" />
+    </logger>
+    <logger name="org.springframework.security" level="INFO" additivity="false" >
+        <appender-ref ref="CONSOLE" />
+    </logger>
+    <logger name="org.springframework.transaction.annotation.AnnotationTransactionAttributeSource" level="DEBUG" additivity="false" >
+        <appender-ref ref="CONSOLE" />
+    </logger>
+    <logger name="org.springframework.jdbc.datasource.DataSourceTransactionManager" level="DEBUG"  additivity="false" >
+        <appender-ref ref="CONSOLE" />
+    </logger>
+    <logger name="org.springframework.test.web.servlet" additivity="false"  level="DEBUG" >
+        <appender-ref ref="CONSOLE" />
+    </logger>
+    <logger name="org.springframework.cloud.sleuth.instrument.web" additivity="false"  level="INFO" >
+        <appender-ref ref="CONSOLE" />
+    </logger>
+    <!-- [End] Spring log -->
+
+    <!-- SQL log -->
+    <logger name="org.springframework.jdbc" level="DEBUG" additivity="false">
+        <appender-ref ref="CONSOLE" />
+    </logger>
+
+    <logger name="access" level="TRACE" additivity="false">
+        <appender-ref ref="CONSOLE" />
+    </logger>
+    <logger name="org.mybatis" level="DEBUG" additivity="false">
+        <appender-ref ref="CONSOLE" />
+    </logger>
+    <!-- [End] SQL log -->
+
+    <logger name="org.apache.catalina" level="ERROR">
+        <appender-ref ref="CONSOLE" />
+    </logger>
+
+    <logger name="org.apache.commons" level="ERROR">
+        <appender-ref ref="CONSOLE" />
+    </logger>
+<!--
+    <logger name="com.zaxxer.hikari" level="WARN">
+        <appender-ref ref="CONSOLE" />
+    </logger>
+    <logger name="springfox.documentation" level="WARN">
+        <appender-ref ref="CONSOLE" />
+    </logger>-->
+
+
+    <logger name="kr.co.tworld.shop.my" level="DEBUG" additivity="false">
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="FILELOG_BASE"/>
+    </logger>
+
+
+    <root level="debug">
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="FILELOG_BASE"/>
+    </root>
+
+</included>

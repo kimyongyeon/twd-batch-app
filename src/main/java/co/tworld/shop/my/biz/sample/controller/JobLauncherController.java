@@ -21,7 +21,7 @@ public class JobLauncherController {
     @Autowired
     private JobLauncher jobLauncher;
 
-    // http://localhost:10011/jobLauncher/simpleJob?requestDate=20190101
+    // http://localhost:10012/sample/jobLauncher/simpleJob?requestDate=20190101
     @GetMapping("/jobLauncher/{jobName}")
     public String launch(@PathVariable String jobName, @RequestParam Map<String, String> jobParameters) {
         try {
