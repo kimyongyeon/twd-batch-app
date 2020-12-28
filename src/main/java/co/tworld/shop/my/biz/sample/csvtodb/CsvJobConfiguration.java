@@ -18,6 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.dao.DeadlockLoserDataAccessException;
+import org.apache.http.conn.ConnectTimeoutException;
 
 import javax.sql.DataSource;
 
@@ -49,6 +51,10 @@ public class CsvJobConfiguration {
                 .reader(reader())
                 .processor(processor())
                 .writer(writer)
+                .faultTolerant()
+                .retryLimit(3)
+                .retry(ConnectTimeoutException.class)
+                .retry(DeadlockLoserDataAccessException.class)
                 .build();
     }
 
@@ -67,7 +73,6 @@ public class CsvJobConfiguration {
 
     @Bean
     public ItemProcessor<Person, Person> processor() {
-//        return new PersonItemProcessor();
         return new ItemProcessor<Person, Person>() {
             @Override
             public Person process(final Person person) throws Exception {

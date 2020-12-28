@@ -2,6 +2,7 @@ package co.tworld.shop.my.biz.sample.dbtodb;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.http.conn.ConnectTimeoutException;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
@@ -12,6 +13,7 @@ import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.support.ListItemReader;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.dao.DeadlockLoserDataAccessException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +44,10 @@ public class DbJobConfig {
                 .reader(unPaidMemberReader())
                 .processor(this.unPaidMemberProcessor())
                 .writer(this.unPaidMemberWriter())
+                .faultTolerant()
+                .retryLimit(3)
+                .retry(ConnectTimeoutException.class)
+                .retry(DeadlockLoserDataAccessException.class)
                 .build();
     }
 
