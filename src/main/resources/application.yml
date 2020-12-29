@@ -23,3 +23,9 @@ spring:
       file-date-format: ""
       enabled: true
     basedir: .
+
+batch:
+  retry:
+    initInterval: 1000 # 최초 1초 대기
+    maxInterval: 10000 # 최대 10초 이후는 계속 10초 후에 재시도
+    multiplier: 2 # 2배초 만큼 시간이 늘어난다.

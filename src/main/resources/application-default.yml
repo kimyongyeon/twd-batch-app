@@ -3,17 +3,29 @@ spring:
     console:
       enabled: true  # H2 웹 콘솔을 사용하겠다는 의미
       path: /test_db  # 콘솔의 경로
-    datasource:
-      driver-class-name: org.h2.Driver  #h2 드라이버 설정
-      url: jdbc:h2:file:~/Develop/Github/SpringBlogExam/test_db;AUTO_SERVER=TRUE  #접속 URL
-      username: test  # 사용자 이름 (로그인 시 사용)
-      password: 1234  # 사용자 암호 (로그인 시 사용)
+
+  datasource:
+    driver-class-name: org.h2.Driver  #h2 드라이버 설정
+    url: jdbc:h2:./tmp/test_db; # file
+    username: sa  # 사용자 이름 (로그인 시 사용)
+    password: password   # 사용자 암호 (로그인 시 사용)
+
   jpa:
     open-in-view: false
     generate-ddl: true
-    show-sql: true
     hibernate:
       ddl-auto: create
+    show-sql: true
     properties:
       hibernate:
         format_sql: true
+
+  batch:
+    # always: 프로그램 실행시 batch 스키마 정보 초기화
+    # never: batch 스키마 정보를 초기화 하지 않음.
+    initialize-schema: never
+    job:
+      # 최초 시작시 잡들을 실행할지 물어보는 것임
+      enabled: false
+
+
