@@ -3,8 +3,46 @@
 git clone https://github.com/kimyongyeon/twd-batch-app.git
 ```
 
+# job 커맨드라인 실행
+## 리눅스 
+java -cp "target/dependency-jars/*:target/twd-batch-app-0.0.1-SNAPSHOT.jar" org.springframework.batch.core.launch.support.CommandLineJobRunner co.tworld.shop.my.biz.sample.sample.SampleJobConfiguration sampleJob requestDate=20210101
+
+## 윈도우
+java -jar target/twd-batch-app-0.0.1-SNAPSHOT.jar org.springframework.batch.core.launch.support.CommandLineJobRunner co.tworld.shop.my.biz.sample.sample.SampleJobConfiguration sampleJob requestDate=20210101
+
 # controller 호출
-http://localhost:10012/sample/jobLauncher/simpleJob?requestDate=20190101
+http://localhost:10012/sample/jobLauncher/simpleJob?requestDate=20210101
+
+# 순차 처리 
+```
+@Bean
+public Job sampleJob(Step sampleStep1, Step sampleStep2) {
+    // 순차스텝: start, next... 선후관계가 있는경우 사용.
+    // 부모 잡 실행 컨텍스트와 순서를 공유 함.
+    return jobBuilderFactory.get("sampleJob")
+            .preventRestart()
+            .start(sampleStep1)
+            .incrementer(new UniqueRunIdIncrementer())
+            .next(sampleStep2)
+            .build();
+}
+```
+
+# 동시 처리
+```
+@Bean(name = JOB_NAME +"_step")
+@JobScope
+public Step step() {
+    return stepBuilderFactory.get(JOB_NAME +"_step")
+            .<Product, ProductBackup>chunk(chunkSize)
+            .reader(reader(null))
+            .processor(processor())
+            .writer(writer())
+            .taskExecutor(executor()) // (2)
+            .throttleLimit(poolSize) // (3)
+            .build();
+}
+```
 
 # csv to db 템플릿 
 ```
@@ -88,6 +126,30 @@ public ItemWriter<Member> unPaidMemberWriter() {
     log.info("********** This is unPaidMemberWriter");
     return ((List<? extends Member> memberList) ->
             memberRepository.saveAll(memberList));
+}
+```
+
+# Retry 방법
+```
+// AOP 방식
+@Retryable(backoff = @Backoff(delay = 1000, maxDelay = 10000, multiplier = 2))
+
+// 프로그래밍 방식
+@Bean
+public Step step1(JdbcBatchItemWriter<Person> writer) {
+    return stepBuilderFactory
+            .get("step1")
+            .<Person, Person> chunk(10)
+            .reader(reader())
+            .processor(processor())
+            .writer(writer)
+            .faultTolerant()
+            .noRollback(RuntimeException.class) // 오류가 허용되는 스텝
+            .retryLimit(3)
+            .retry(ConnectTimeoutException.class) // 재시도 대상 Exception 타임아웃
+            .retry(DeadlockLoserDataAccessException.class) // 재시도 대상 Exception 데드락
+            .transactionManager(transactionManager)
+            .build();
 }
 ```
 
@@ -250,6 +312,10 @@ export spring_profiles_active=dev
 mvn clean package -Plocal
 
 ```
+
+# 참고사이트
+순차처리: https://12bme.tistory.com/557
+동시처리: https://jojoldu.tistory.com/493
 
 # 폴더구조
 ```

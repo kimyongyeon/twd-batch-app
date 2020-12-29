@@ -1,16 +1,21 @@
 spring:
-  data:
-    maria:
-      jdbc-url: jdbc:mariadb://rds-mariadb.ch4ipcxitqs1.ap-northeast-2.rds.amazonaws.com:3306/wickies?useUnicode=yes&characterEncoding=UTF-8
-      driver-class-name: org.mariadb.jdbc.Driver
-      username: admin
-      password: 1234
+  datasource:
+    hikari:
+      auto-commit: false
+      connection-test-query: select 1 from dual
+      connection-timeout: 60000
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: xxxx
+    password: xxxx
+    url: jdbc:mysql://tds-dev-db.cluster-ctabiul02uv4.ap-northeast-2.rds.amazonaws.com/tdsdb
+
   jpa:
     open-in-view: false
     generate-ddl: true
     show-sql: true
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
     properties:
       hibernate:
         format_sql: true
